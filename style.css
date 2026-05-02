@@ -1370,3 +1370,44 @@ html, body {
   #dialog-text { font-size: 1rem; }
   #dialog-body { padding: 8px 10px 8px; min-height: 70px; }
 }
+
+/* ═══════════════════════════════════════════════════════
+   BOTÃO MUTE — fixo no canto inferior direito
+═══════════════════════════════════════════════════════ */
+
+#mute-btn {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 9999;
+  width: 44px;
+  height: 44px;
+  padding: 6px;
+  background: var(--wood-dark);
+  border: 3px solid var(--wood-light);
+  border-radius: 2px;
+  cursor: pointer;
+  box-shadow: var(--px-shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+  image-rendering: pixelated;
+}
+
+#mute-btn:hover {
+  background: var(--wood-mid);
+  border-color: var(--sand);
+}
+
+#mute-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+#mute-btn.muted {
+  opacity: 0.55;
+  border-color: var(--red-err);
+}

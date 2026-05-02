@@ -283,6 +283,7 @@ const ANIM = {
       if (typeIndex < targetText.length) {
         currentText += targetText[typeIndex++];
         textEl.innerHTML = currentText;
+        Audio.blip();
       } else {
         clearInterval(typeTimer);
         canAdvance = true;
@@ -479,6 +480,124 @@ const Intro = (() => {
 
 })();
 
+
+
+// ═══════════════════════════════════════════════════════════════════
+//  SISTEMA DE ÁUDIO
+//  - Música: audio/theme_song.ogg
+//  - Blips de voz: Web Audio API (sem arquivo externo)
+//  - Botão mute: assets/mute_ic_1.png (mutado) / mute_ic_2.png (ativo)
+// ═══════════════════════════════════════════════════════════════════
+
+const Audio = (() => {
+
+  let muted   = false;
+  let bgMusic = null;
+  let audioCtx = null;
+  let started  = false;
+
+  function init() {
+    if (started) return;
+    started = true;
+
+    // Música de fundo
+    bgMusic = document.createElement('audio');
+    bgMusic.src    = 'audio/theme_song.ogg';
+    bgMusic.loop   = true;
+    bgMusic.volume = 0.35;
+    document.body.appendChild(bgMusic);
+
+    bgMusic.play().catch(() => {
+      document.addEventListener('click', () => bgMusic.play().catch(()=>{}), { once: true });
+    });
+
+    // Web Audio API para blips de voz
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e) { audioCtx = null; }
+  }
+
+  // ── Murmurinho estilo Stardew Valley ──────────────────────────
+  // Cada letra dispara um "fonema" sintético:
+  //   1. Oscilador sawtooth (base da voz humana)
+  //   2. BandPass filter (timbre vocal — grave para o Willy)
+  //   3. Envelope curtíssimo com pitch levemente aleatório
+  //   4. Cooldown por letra para não sobrecarregar
+  let blipCooldownTime = 0;
+
+  // Notas base para o Willy: voz grave de marinheiro velho (~100-160 Hz)
+  // Pequena variação aleatória por letra para soar como "sílabas"
+  const WILLY_BASE_FREQ = 115;   // Hz — quanto mais baixo, mais grave
+  const WILLY_FREQ_VAR  = 35;    // variação aleatória acima da base
+  const WILLY_FILTER_HZ = 800;   // centro do bandpass — formante vocal
+  const WILLY_DURATION  = 0.075; // segundos por "fonema"
+  const WILLY_COOLDOWN  = 55;    // ms entre fonemas
+
+  function blip() {
+    if (muted || !audioCtx) return;
+
+    // Cooldown baseado em tempo real (mais preciso que flag booleana)
+    const now = audioCtx.currentTime;
+    if (now < blipCooldownTime) return;
+    blipCooldownTime = now + WILLY_COOLDOWN / 1000;
+
+    try {
+      // Pitch levemente aleatório — soa como sílabas diferentes
+      const pitch = WILLY_BASE_FREQ + Math.random() * WILLY_FREQ_VAR;
+
+      // 1. Oscilador principal — sawtooth é mais parecido com voz humana
+      const osc = audioCtx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(pitch, now);
+      // Pequena variação de pitch DURANTE a nota (como vogal)
+      osc.frequency.linearRampToValueAtTime(pitch * (0.92 + Math.random() * 0.16), now + WILLY_DURATION);
+
+      // 2. Filtro bandpass — imita o trato vocal humano
+      const filter = audioCtx.createBiquadFilter();
+      filter.type            = 'bandpass';
+      filter.frequency.value = WILLY_FILTER_HZ;
+      filter.Q.value         = 2.5; // largura do formante
+
+      // 3. Segundo filtro lowpass — suaviza os harmônicos altos (voz velha)
+      const lowpass = audioCtx.createBiquadFilter();
+      lowpass.type            = 'lowpass';
+      lowpass.frequency.value = 1400;
+
+      // 4. Envelope de amplitude — ataque rápido, decay suave
+      const gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0.0, now);
+      gain.gain.linearRampToValueAtTime(0.22, now + 0.008);          // ataque
+      gain.gain.exponentialRampToValueAtTime(0.001, now + WILLY_DURATION); // decay
+
+      // Cadeia: osc → filter → lowpass → gain → saída
+      osc.connect(filter);
+      filter.connect(lowpass);
+      lowpass.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + WILLY_DURATION + 0.01);
+
+    } catch(e) {}
+  }
+
+  function toggleMute() {
+    muted = !muted;
+    if (bgMusic) bgMusic.volume = muted ? 0 : 0.35;
+    const btn = document.getElementById('mute-btn');
+    if (btn) {
+      const img = btn.querySelector('img');
+      // mute_ic_1 = ícone de mutado | mute_ic_2 = ícone de som ativo
+      if (img) img.src = muted ? 'assets/mute_ic_1.png' : 'assets/mute_ic_2.png';
+      btn.title = muted ? 'Ativar som' : 'Silenciar';
+    }
+  }
+
+  function isMuted() { return muted; }
+
+  return { init, blip, toggleMute, isMuted };
+
+})();
 
 const Game = (() => {
 
@@ -1342,6 +1461,7 @@ const Game = (() => {
   // ════════════════════════════════════════════════════════════════
 
   function startGame() {
+    Audio.init();
     state = { phase:0, score:0, history:[], active:new Set(), classifAns:{}, checked:false, attempts:0, hintOpen:false };
     showScreen('game');
     // Mostrar intro narrativa antes de carregar a primeira fase
