@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Batalha Naval das Relações</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ░░░ TELA INICIAL ░░░ -->
+<div id="screen-home" class="screen active">
+  <div class="ocean-bg">
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+    <div class="wave wave3"></div>
+  </div>
+  <div class="bubbles" id="bubbles"></div>
+
+  <div class="home-wrap">
+    <div class="pixel-frame home-frame">
+      <div class="anchor-icon">⚓</div>
+      <div class="pixel-eyebrow">
+        <span class="star"></span>
+        <span class="star"></span>
+        <span class="star"></span>
+        <span class="star"></span>
+        <span class="star"></span>
+      </div>
+      <p class="pixel-eyebrow-sub">OPERAÇÃO NÓ GÓRDIO</p>
+      <h1 class="pixel-title"><span class="ta">BATALHA</span> NAVAL</h1>
+      <p class="pixel-tagline">Decifre os códigos da Armada GAR<br>e afunde a frota inimiga de uma vez por todas!</p>
+
+      <div class="menu-list">
+        <button class="menu-btn" id="btn-play" onclick="Game.startGame()">
+          <span class="m-arrow blink">▶</span> INICIAR
+        </button>
+        <button class="menu-btn" onclick="Game.showScreen('instructions')">
+          <span class="m-arrow">▶</span> INSTRUÇÕES
+        </button>
+      </div>
+
+      <!-- <div class="home-tags">
+        <span class="htag">ENSINO MÉDIO</span>
+        <span class="htag">INTERATIVO</span>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- ░░░ TELA INSTRUÇÕES ░░░ -->
+<div id="screen-instructions" class="screen">
+  <div class="ocean-bg">
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+  </div>
+
+  <div class="instr-wrap">
+    <div class="pixel-frame instr-frame">
+      <div class="instr-topbar">
+        <button class="back-btn" onclick="Game.showScreen('home')">◀ VOLTAR</button>
+        <h2 class="instr-title">MANUAL DO COMANDANTE</h2>
+      </div>
+
+      <div class="instr-body">
+
+        <div class="instr-card">
+          <h3>🌊 O QUE É UMA RELAÇÃO?</h3>
+          <p>Uma <b>relação matemática</b> R em A é um subconjunto do produto cartesiano A×A — ou seja, um conjunto de pares ordenados (a,b).</p>
+          <p>A Armada GAR usa <b>padrões matemáticos</b> para coordenar suas frotas. Cada padrão é uma relação entre naves. No tabuleiro: <b>linhas e colunas = números das naves</b>. Célula ⚓ marcada = aquelas duas naves se comunicam.</p>
+        </div>
+
+        <div class="instr-props">
+          <div class="instr-card prop-card">
+            <h3>🔁 REFLEXIVA</h3>
+            <p>(a,a) ∈ R para todo a ∈ A</p>
+            <p>→ Diagonal principal toda marcada</p>
+            <div class="mini-board" data-ex="reflex"></div>
+          </div>
+          <div class="instr-card prop-card">
+            <h3>🔄 SIMÉTRICA</h3>
+            <p>Se (a,b) ∈ R então (b,a) ∈ R</p>
+            <p>→ Tabuleiro espelhado na diagonal</p>
+            <div class="mini-board" data-ex="simex"></div>
+          </div>
+          <div class="instr-card prop-card">
+            <h3>⛓ TRANSITIVA</h3>
+            <p>Se (a,b) e (b,c) ∈ R então (a,c) ∈ R</p>
+            <p>→ Cadeia de comunicação fechada</p>
+            <div class="mini-board" data-ex="trans"></div>
+          </div>
+          <div class="instr-card prop-card">
+            <h3>EQUIVALÊNCIA</h3>
+            <p>Reflexiva + Simétrica + Transitiva</p>
+            <p>→ As três ao mesmo tempo!</p>
+            <div class="mini-board" data-ex="equiv"></div>
+          </div>
+        </div>
+
+        <div class="instr-card">
+          <h3>🕹 COMO JOGAR</h3>
+          <ul>
+            <li>▸ O tabuleiro usa <b>números nas linhas E colunas</b> — ambos do conjunto A = {1,2,3,4}.</li>
+            <li>▸ Cada célula = par ordenado (a,b). Ex: célula linha 2, coluna 3 = par (2,3).</li>
+            <li>▸ Clique para marcar/desmarcar pares. Células com borda tracejada são <b>fixas</b>.</li>
+            <li>▸ Clique <b>DECODIFICAR</b> para checar. Células ficam verdes ✓ ou vermelhas ✗.</li>
+            <li>▸ Use <b>💡 DICA</b> para consultar o caderninho do Willy com a explicação matemática.</li>
+            <li>▸ +20 pts sem erros · +10 pts com erros · -5 pts por tentativa extra.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <button class="menu-btn" style="align-self:center;margin-top:8px" onclick="Game.startGame()">⚓ EMBARCAR AGORA</button>
+    </div>
+  </div>
+</div>
+
+<!-- ░░░ TELA DO JOGO ░░░ -->
+<div id="screen-game" class="screen">
+  <div class="ocean-bg ocean-bg--game">
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+  </div>
+
+  <!-- HUD superior -->
+  <div class="hud">
+    <div class="hud-l">
+      <button class="hud-btn home-btn" onclick="Game.showScreen('home')"> </button>
+      <div class="hud-phase-tag" id="hud-phase">FASE 1/5</div>
+    </div>
+    <div class="hud-c">
+      <div class="hud-pts-lbl">PONTOS</div>
+      <div class="hud-pts" id="score-disp">000</div>
+    </div>
+    <div class="hud-r">
+        <button class="hud-btn" onclick="Game.toggleHint()">
+          <!-- <span class="dica-text">Dica</span> -->
+          <img src="assets/dica_ic.png" alt="Dica" class="icon">
+  </button>
+    </div>
+  </div>
+
+  <div class="game-layout">
+
+    <!-- COLUNA PRINCIPAL -->
+    <div class="col-main">
+
+      <!-- Caixa de missão -->
+      <div class="mission-box pf-sm" id="mission-box">
+        <div class="mis-icon" id="mis-icon">🔁</div>
+        <div class="mis-body">
+          <div class="mis-name" id="mis-name">FASE 1 — REFLEXIVIDADE</div>
+          <div class="mis-obj"  id="mis-obj">Marque todos os pares (a,a) na diagonal principal.</div>
+        </div>
+      </div>
+
+      <!-- Dica -->
+      <div class="hint-box pf-sm" id="hint-box" style="display:none">
+        <div id="hint-content">…</div>
+      </div>
+
+      <!-- Tabuleiro naval -->
+      <div class="board-wrap pf-sm">
+        <div class="board-grid" id="board-grid"></div>
+      </div>
+
+      <!-- Legenda -->
+      <div class="legend">
+        <span class="leg"><i class="lc lc-empty"></i>Vazio</span>
+        <span class="leg"><i class="lc lc-on"></i>Marcado</span>
+        <span class="leg"><i class="lc lc-locked"></i>Fixo</span>
+        <span class="leg"><i class="lc lc-ok"></i>Correto</span>
+        <span class="leg"><i class="lc lc-err"></i>Erro</span>
+        <span class="leg"><i class="lc lc-miss"></i>Faltando</span>
+      </div>
+    </div>
+
+    <!-- COLUNA LATERAL -->
+    <div class="col-side">
+
+      <!-- Painel classificação (fase 4) -->
+      <div class="classif-panel pf-sm" id="classif-panel" style="display:none">
+        <div class="cp-title">🔭 ANÁLISE DO SINAL</div>
+        <div id="classif-items"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="feedback-box pf-sm" id="feedback-box" style="display:none">
+        <img class="fb-ico" id="fb-ico" src="assets/UI_Flat_IconCheck01a.png" alt="Ícone de feedback" />
+        <div class="fb-txt" id="fb-txt">…</div>
+      </div>
+
+      <!-- Botões -->
+      <div class="action-row">
+        <button class="pixel-btn btn-check" id="btn-check" onclick="Game.checkAnswer()">DECODIFICAR</button>
+        <button class="pixel-btn btn-next"  id="btn-next"  onclick="Game.nextPhase()" style="display:none">PRÓXIMO SINAL ▶</button>
+      </div>
+
+      <!-- Progresso de fases -->
+      <div class="phase-dots" id="phase-dots"></div>
+
+      <!-- Conjunto A informativo -->
+      <div class="set-info pf-sm" id="set-info">
+        <div class="si-title">⚓ FROTAS EM CAMPO</div>
+        <div class="si-val" id="set-display">{1, 2, 3, 4}</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ░░░ TELA FINAL ░░░ -->
+<div id="screen-final" class="screen">
+  <div class="ocean-bg">
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+    <div class="wave wave3"></div>
+  </div>
+
+  <div class="final-wrap">
+    <div class="pixel-frame final-frame">
+      <div class="final-trophy">🏆</div>
+      <h2 class="final-h">⚓ MISSÃO CONCLUÍDA!</h2>
+      <p class="final-sub">A Armada Kraken foi derrotada! Os mares são nossos!</p>
+
+      <div class="final-score-box">
+        <div class="fsb-lbl">PONTUAÇÃO FINAL</div>
+        <div class="fsb-val" id="final-score">000</div>
+        <div class="fsb-max">de 300 pontos</div>
+      </div>
+
+      <div class="final-rank" id="final-rank">
+        <span id="rank-ico">⭐</span>
+        <span id="rank-lbl">Almirante das Relações</span>
+      </div>
+
+      <div class="final-sum" id="final-sum"></div>
+
+      <div class="final-btns">
+        <button class="pixel-btn btn-check" onclick="Game.restartGame()">🔄 NOVA OPERAÇÃO</button>
+        <button class="pixel-btn btn-next"  onclick="Game.showScreen('home')">🏠 INÍCIO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
