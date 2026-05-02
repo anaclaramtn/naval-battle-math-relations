@@ -504,7 +504,7 @@ const Audio = (() => {
     bgMusic = document.createElement('audio');
     bgMusic.src    = 'audio/theme_song.ogg';
     bgMusic.loop   = true;
-    bgMusic.volume = 0.35;
+    bgMusic.volume = 0.15;
     document.body.appendChild(bgMusic);
 
     bgMusic.play().catch(() => {
@@ -637,7 +637,7 @@ const Game = (() => {
         'Marque EXATAMENTE os pares da diagonal: (1,1), (2,2), (3,3) e (4,4). ' +
         'Nem mais, nem menos! Uma relação reflexiva garante que todo elemento se comunica consigo mesmo.',
       hint: `
-        <b>📌 Propriedade Reflexiva</b><br>
+        <b>Propriedade Reflexiva</b><br>
         R é <b>reflexiva</b> quando <b>(a,a) ∈ R</b> para todo a ∈ A.<br><br>
         No tabuleiro, isso significa marcar a <b>diagonal principal</b>:<br>
         (1,1) · (2,2) · (3,3) · (4,4)<br><br>
@@ -693,7 +693,7 @@ const Game = (() => {
         'Para ser Simétrica: se (a,b) existe, (b,a) também deve existir. ' +
         'Ex: (1,2) está fixo → marque (2,1).',
       hint: `
-        <b>📌 Propriedade Simétrica</b><br>
+        <b>Propriedade Simétrica</b><br>
         R é <b>simétrica</b> quando: se (a,b) ∈ R → (b,a) ∈ R.<br><br>
         No tabuleiro: o par <b>espelhado na diagonal</b> deve estar marcado.<br>
         Se (1,2) está marcado (linha 1, col 2), então (2,1) (linha 2, col 1) deve estar também.<br><br>
@@ -746,7 +746,7 @@ const Game = (() => {
         'se (a,b) e (b,c) existem, então (a,c) deve existir. ' +
         'Atenção: fechar um par pode criar novas obrigações!',
       hint: `
-        <b>📌 Propriedade Transitiva</b><br>
+        <b>Propriedade Transitiva</b><br>
         R é <b>transitiva</b> quando: se (a,b) ∈ R e (b,c) ∈ R → (a,c) ∈ R.<br><br>
         Estratégia: vá par a par, procurando "encadeamentos".<br>
         Ex: (1,2) e (2,3) → precisa de (1,3).<br>
@@ -824,7 +824,7 @@ const Game = (() => {
         'Analise a relação exibida (pares fixos) e classifique cada propriedade com SIM ou NÃO. ' +
         'Cuidado — há uma armadilha! Observe com atenção.',
       hint: `
-        <b>📌 Como classificar passo a passo:</b><br><br>
+        <b>Como classificar passo a passo:</b><br><br>
         <b>1. Reflexiva?</b> (1,1),(2,2),(3,3),(4,4) estão todos marcados?<br>
         <b>2. Simétrica?</b> Para cada (a,b), existe o espelho (b,a)?<br>
         <b>3. Transitiva?</b> Procure: (a,b) e (b,c) → (a,c) existe?<br>
@@ -884,7 +884,7 @@ const Game = (() => {
         'deve ser Reflexiva + Simétrica + Transitiva ao mesmo tempo. ' +
         'Existem várias soluções válidas — encontre uma!',
       hint: `
-        <b>📌 Relação de Equivalência = R + S + T juntas</b><br><br>
+        <b>Relação de Equivalência = R + S + T juntas</b><br><br>
         <b>Soluções válidas:</b><br>
         • Só a diagonal: {(1,1),(2,2),(3,3),(4,4)} — 4 pares<br>
         • Produto completo: todos os 16 pares<br>
@@ -1004,7 +1004,7 @@ const Game = (() => {
         'Complete a relação para que ela seja REFLEXIVA e SIMÉTRICA ao mesmo tempo. ' +
         'Os pares fixos já fazem parte da relação — adicione o que falta para satisfazer as duas propriedades.',
       hint: `
-        <b>📌 Reflexiva E Simétrica juntas</b><br>
+        <b>Reflexiva E Simétrica juntas</b><br>
         Para ser <b>reflexiva</b>: ative toda a diagonal — (1,1),(2,2),(3,3),(4,4),(5,5).<br>
         Para ser <b>simétrica</b>: para cada par (a,b) ativo, ative também (b,a).<br><br>
         Faça as duas ao mesmo tempo!<br><br>
@@ -1084,7 +1084,7 @@ const Game = (() => {
         'Analise a relação exibida no tabuleiro 6×6 e classifique cada propriedade com SIM ou NÃO. ' +
         'Atenção: esta relação tem duas armadilhas sutis!',
       hint: `
-        <b>📌 Checklist de classificação:</b><br><br>
+        <b>Checklist de classificação:</b><br><br>
         <b>1. Reflexiva?</b> Todos os (a,a) estão marcados?<br>
         <b>2. Simétrica?</b> Todo par (a,b) tem seu espelho (b,a)?<br>
         <b>3. Transitiva?</b> Toda cadeia (a,b)+(b,c) tem (a,c)?<br>
@@ -1159,7 +1159,7 @@ const Game = (() => {
         'Complete a relação para que seja APENAS Transitiva — sem precisar ser reflexiva. ' +
         'Os pares fixos formam caminhos cruzados. Feche todas as cadeias transitivas!',
       hint: `
-        <b>📌 Transitividade sem Reflexividade</b><br>
+        <b>Transitividade sem Reflexividade</b><br>
         Uma relação pode ser transitiva sem ter a diagonal.<br><br>
         Estratégia: para cada par (a,b) e (b,c) existentes, adicione (a,c).<br>
         Repita com os pares recém-adicionados — novas cadeias podem surgir!<br><br>
@@ -1266,7 +1266,7 @@ const Game = (() => {
         'Analise esta relação 8×8 e classifique as 4 propriedades. ' +
         'Cuidado — desta vez a relação PODE ser de equivalência. Verifique cada propriedade com rigor!',
       hint: `
-        <b>📌 Reconhecendo uma Equivalência</b><br>
+        <b>Reconhecendo uma Equivalência</b><br>
         Esta relação foi construída a partir da partição {1,2,3,4} e {5,6,7,8}.<br><br>
         (a,b) ∈ R ↔ a e b estão no mesmo grupo.<br><br>
         • <b>Reflexiva?</b> Todo (a,a) está marcado? Sim — diagonal completa.<br>
@@ -1338,7 +1338,7 @@ const Game = (() => {
         'π = { {1,2,3}, {4,5,6}, {7,8}, {9,10} }. ' +
         'Marque EXATAMENTE os pares (a,b) onde a e b estão na mesma classe. São 26 pares no total!',
       hint: `
-        <b>📌 Partição → Relação de Equivalência</b><br>
+        <b>Partição → Relação de Equivalência</b><br>
         Cada partição define: (a,b) ∈ R ↔ a e b estão na mesma classe.<br><br>
         <b>Suas classes:</b><br>
         • {1,2,3} → 9 pares: (1,1),(1,2),(1,3),(2,1),(2,2),(2,3),(3,1),(3,2),(3,3)<br>

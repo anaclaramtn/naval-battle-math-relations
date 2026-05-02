@@ -1242,8 +1242,8 @@ html, body {
 }
 
 #dialog-portrait {
-  width: clamp(90px, 17vw, 135px);
-  height: clamp(85px, 16vw, 127px);
+  width: clamp(110px, 21vw, 165px);
+  height: clamp(104px, 20vw, 155px);
   object-fit: cover;
   object-position: top;
   image-rendering: pixelated;
