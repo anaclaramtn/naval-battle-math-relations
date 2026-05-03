@@ -858,8 +858,10 @@ const Game = (() => {
 
         const labels = { reflexiva:'Reflexiva', simetrica:'Simétrica', transitiva:'Transitiva', equivalencia:'Equivalência' };
         const justif = {
-          transitiva:   ' — (1,2) e (2,3) existem, mas (1,3) não está na relação!',
-          equivalencia: ' — não é transitiva, portanto não pode ser de equivalência.',
+          reflexiva:    ' — Def: ∀a(a ∈ A → (a,a) ∈ R). A diagonal completa deve estar marcada.',
+          simetrica:    ' — Def: ∀a,b((a,b) ∈ R → (b,a) ∈ R). Todo par deve ter seu espelho.',
+          transitiva:   ' — Def: ∀a,b,c((a,b) ∈ R ∧ (b,c) ∈ R → (a,c) ∈ R). (1,2) e (2,3) existem, mas (1,3) não está!',
+          equivalencia: ' — Requer reflexiva ∧ simétrica ∧ transitiva. Como não é transitiva, não pode ser equivalência.',
         };
         const msgs = wrong.map(p =>
           `<b>${labels[p]}</b>: correto é <b>${ans[p]?'SIM':'NÃO'}</b>${justif[p]||''}`
@@ -1130,9 +1132,10 @@ const Game = (() => {
 
         const labels = { reflexiva:'Reflexiva', simetrica:'Simétrica', transitiva:'Transitiva', equivalencia:'Equivalência' };
         const justif = {
-          simetrica:    ' — ex: (1,2) ∈ R mas (2,1) ∉ R.',
-          transitiva:   ' — todos os atalhos (i,k) com i<j<k estão marcados.',
-          equivalencia: ' — para ser equivalência precisa ser simétrica, o que esta relação não é.',
+          reflexiva:    ' — Def: ∀a(a ∈ A → (a,a) ∈ R). A diagonal inteira está marcada.',
+          simetrica:    ' — Def: ∀a,b((a,b) ∈ R → (b,a) ∈ R). Ex: (1,2) ∈ R mas (2,1) ∉ R — violação!',
+          transitiva:   ' — Def: ∀a,b,c((a,b)∈R ∧ (b,c)∈R → (a,c)∈R). Todos os atalhos i→k com i<j<k estão presentes.',
+          equivalencia: ' — Requer reflexiva ∧ simétrica ∧ transitiva. Como não é simétrica, não pode ser equivalência.',
         };
         const msgs = wrong.map(p =>
           `<b>${labels[p]}</b>: correto é <b>${ans[p]?'SIM':'NÃO'}</b>${justif[p]||''}`
@@ -1308,10 +1311,10 @@ const Game = (() => {
 
         const labels = { reflexiva:'Reflexiva', simetrica:'Simétrica', transitiva:'Transitiva', equivalencia:'Equivalência' };
         const justif = {
-          reflexiva:    ' — a diagonal completa está marcada.',
-          simetrica:    ' — os dois blocos são completamente simétricos.',
-          transitiva:   ' — dentro de cada bloco, todos os atalhos existem.',
-          equivalencia: ' — é reflexiva, simétrica E transitiva ao mesmo tempo!',
+          reflexiva:    ' — Def: ∀a(a ∈ A → (a,a) ∈ R). Toda nave se comunica consigo mesma ✓',
+          simetrica:    ' — Def: ∀a,b((a,b) ∈ R → (b,a) ∈ R). Cada par tem seu espelho dentro do bloco ✓',
+          transitiva:   ' — Def: ∀a,b,c((a,b)∈R ∧ (b,c)∈R → (a,c)∈R). Dentro de cada bloco, todos os atalhos existem ✓',
+          equivalencia: ' — Def: R é reflexiva ∧ simétrica ∧ transitiva. As três são satisfeitas — é de equivalência! ✓',
         };
         const msgs = wrong.map(p =>
           `<b>${labels[p]}</b>: correto é <b>${ans[p]?'SIM':'NÃO'}</b>${justif[p]||''}`
