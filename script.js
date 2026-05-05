@@ -705,6 +705,9 @@ const Game = (() => {
       locked:        ['0,1','0,2','1,3','2,3'],
 
       check(active) {
+        if (active.size === N * N)
+          return { ok:false, msg:'Marcar todas as células não vale! Encontre a relação simétrica correta.' };
+
         const missing = [];
         for (const k of active) {
           const [i,j] = k.split(',').map(Number);
@@ -782,6 +785,10 @@ const Game = (() => {
           }
         }
         const realMissing = [...needed.values()].filter(m => !active.has(m.need));
+
+        if (active.size === N * N)
+          return { ok:false, msg:'Marcar todas as células não vale! Encontre o fecho transitivo correto.' };
+
         if (!realMissing.length)
           return { ok:true, msg:'Fantástico! Todas as cadeias estão fechadas — relação transitiva!' };
 
@@ -797,7 +804,6 @@ const Game = (() => {
 
       highlight(active, r) {
         const misSet = new Set(r.missing||[]);
-        // Pares que causam violação
         const bad = new Set();
         for (const p1 of active) {
           const [a,b1] = p1.split(',').map(Number);
@@ -889,7 +895,7 @@ const Game = (() => {
         <b>Relação de Equivalência = R + S + T juntas</b><br><br>
         <b>Soluções válidas:</b><br>
         • Só a diagonal: {(1,1),(2,2),(3,3),(4,4)} — 4 pares<br>
-        • Produto completo: todos os 16 pares<br>
+        • Produto completo: todos os 16 pares (exceto marcar literalmente tudo de uma vez)<br>
         • Partição {1,2} e {3,4}: marque (1,1),(1,2),(2,1),(2,2) e (3,3),(3,4),(4,3),(4,4)<br><br>
         <b>Estratégia:</b> pense em <em>classes</em>.
         Quem fica no mesmo grupo? Marque todos os pares dentro de cada grupo.
@@ -916,7 +922,7 @@ const Game = (() => {
             errors.push(`Não simétrica: ${ps(i,j)} existe mas falta <b>${ps(j,i)}</b>`);
         }
 
-        // 3. Transitiva (fechamento iterativo)
+        // 3. Transitiva — calcular fecho
         const cur = new Set(active);
         let changed = true;
         const transitNeeded = new Set();
@@ -940,10 +946,14 @@ const Game = (() => {
           }
 
         const unique = [...new Set(errors)];
-        if (!unique.length)
-          return { ok:true, msg:'🏆 BRILHANTE! Relação de equivalência válida construída com sucesso!' };
+        if (unique.length)
+          return { ok:false, msg:unique.slice(0,5).join('<br>') + (unique.length>5?'<br>…':'') };
 
-        return { ok:false, msg:unique.slice(0,5).join('<br>') + (unique.length>5?'<br>…':'') };
+        // Bloquear apenas o caso de marcar tudo
+        if (active.size === N * N)
+          return { ok:false, msg:'Marcar todas as células não vale! Escolha uma partição e monte a equivalência corretamente.' };
+
+        return { ok:true, msg:'BRILHANTE! Relação de equivalência válida construída com sucesso!' };
       },
 
       highlight(active, r) {
@@ -1036,6 +1046,10 @@ const Game = (() => {
           }
         }
 
+        const n5 = 5;
+        if (active.size === n5 * n5)
+          return { ok:false, msg:'Marcar todas as células não vale! Encontre a relação reflexiva e simétrica correta.' };
+
         if (!missDiag.length && !missMirror.length)
           return { ok:true, msg:'Perfeito! A relação é reflexiva E simétrica ao mesmo tempo!' };
 
@@ -1049,18 +1063,15 @@ const Game = (() => {
 
       highlight(active, r) {
         const n = 5;
-        // Diagonal
         for (let i = 0; i < n; i++) {
           const k = key(i,i);
           markCell(k, active.has(k) ? 'f-ok' : 'f-miss');
         }
-        // Pares fora da diagonal
         for (const k of active) {
           const [i,j] = k.split(',').map(Number);
           if (i === j) continue;
           markCell(k, active.has(key(j,i)) ? 'f-ok' : 'f-err');
         }
-        // Espelhos faltando
         for (const k of active) {
           const [i,j] = k.split(',').map(Number);
           const mir = key(j,i);
