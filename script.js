@@ -58,7 +58,7 @@ const INTRO_SLIDES = [
   },
   {
     willy: true,
-    text: "Cada padrão que a GARen transmite é uma RELAÇÃO — um conjunto de pares de naves que se comunicam. Decifre a estrutura desse conjunto e a GARen não tem como se esconder!",
+    text: "Cada padrão que a GAR transmite é uma RELAÇÃO — um conjunto de pares de naves que se comunicam. Decifre a estrutura desse conjunto e a GARen não tem como se esconder!",
     mood: 'talk',
   },
 ];
