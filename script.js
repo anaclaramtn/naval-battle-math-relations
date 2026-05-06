@@ -14,8 +14,13 @@ class Phase {
     this.initialActive = config.initialActive || [];
     this.locked       = config.locked || [];
     this.answers      = config.answers || null;
-    this.check        = config.check || (() => ({ ok: true, msg: '' }));
-    this.highlight    = config.highlight || (() => {});
+    this._classes     = config._classes || null;
+    this._R           = config._R || null;
+    this._S           = config._S || null;
+    this._expected    = config._expected || null;
+    // bind para garantir que 'this' dentro de check/highlight aponta para a instância
+    this.check        = (config.check || (() => ({ ok: true, msg: '' }))).bind(this);
+    this.highlight    = (config.highlight || (() => {})).bind(this);
   }
 }
 
@@ -1836,6 +1841,46 @@ const Game = (() => {
     });
 
     showScreen('final');
+
+    setTimeout(() => {
+      if (state.score >= 200) {
+        // Vitória: coordenadas decifradas
+        Dialog.show([
+          {
+            text: "...Comandante. Acabei de processar os sinais. As coordenadas estão aqui.",
+            mood: 'idle',
+          },
+          {
+            text: "Latitude 34° 47' N, Longitude 28° 12' O. O quartel-general da Armada GAR fica no Arquipélago de Rakatan.",
+            mood: 'talk',
+          },
+          {
+            text: "Você decifrou todos os padrões com precisão. Sem você, jamais chegaríamos lá. Foi uma honra navegar ao seu lado, Comandante.",
+            mood: 'happy',
+          },
+          {
+            text: "...Os canhões já estão apontados. É hora de terminar isso.",
+            mood: 'idle',
+          },
+        ]);
+      } else {
+        // Derrota: interceptações insuficientes
+        Dialog.show([
+          {
+            text: "...Comandante. Os sinais... não foram suficientes. Não conseguimos decifrar as coordenadas completas.",
+            mood: 'blink',
+          },
+          {
+            text: "A Armada GAR percebeu que estava sendo monitorada. Eles mudaram os padrões de comunicação. Precisaremos tentar novamente.",
+            mood: 'idle',
+          },
+          {
+            text: "Não desanime. Cada padrão decifrado nos ensina algo novo. Na próxima operação, estaremos mais preparados.",
+            mood: 'talk',
+          },
+        ]);
+      }
+    }, 800); // pequeno delay para a tela final aparecer primeiro
   }
 
   // ════════════════════════════════════════════════════════════════
