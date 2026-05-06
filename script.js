@@ -697,8 +697,8 @@ const Game = (() => {
         'Os pares fixos (⚓ tracejado) já fazem parte da relação. ' +
         'Para ser Simétrica: se (a,b) existe, (b,a) também deve existir. ' +
         'Ex: (1,2) está fixo → marque (2,1).',
-      hint: `
-        <b>Propriedade Simétrica</b><br>
+      hint: `check
+        <b>Propriedade Simétrica</b><br>check
         R é <b>simétrica</b> quando: se (a,b) ∈ R → (b,a) ∈ R.<br><br>
         No tabuleiro: o par <b>espelhado na diagonal</b> deve estar marcado.<br>
         Se (1,2) está marcado (linha 1, col 2), então (2,1) (linha 2, col 1) deve estar também.<br><br>
@@ -1013,7 +1013,7 @@ const Game = (() => {
     new Phase({
       id: 'reflex_sym',
       name: 'FASE 6 — REFLEXIVA E SIMÉTRICA',
-      icon: '🔁🔄',
+      icon: '🔄',
       size: 5,
       setA: [1,2,3,4,5],
       setDisplay: 'A = {1, 2, 3, 4, 5}',
