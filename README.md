@@ -51,5 +51,3 @@ Abra o arquivo `index.html` em seu navegador ou utilize um servidor local de sua
 
 ## 🤝 Contribuições
 Contribuições são bem-vindas. Caso encontre bugs, tenha sugestões de melhoria ou queira colaborar com novas funcionalidades, fique à vontade para abrir uma *issue* ou enviar um *pull request*.
-
-**Boa sorte, comandante!** ⚓
